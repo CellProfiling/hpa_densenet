@@ -1,7 +1,8 @@
-import logging
 import argparse
+import logging
 import sys
-from hpa_densenet import preprocess, constants
+
+from hpa_densenet import constants, prediction, preprocess
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
@@ -22,7 +23,7 @@ def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> N
         help="destination directory",
         required=True,
     )
-    preprocessing.add_argument("--size", type=int, default=1536, help="size")
+    preprocessing.add_argument("--size", type=int, default=1536, help="image size")
     preprocessing.add_argument(
         "-w",
         "--num-workers",
@@ -56,6 +57,7 @@ def _build_prediction_subcommand(prediction: argparse.ArgumentParser) -> None:
         help="output directory",
         required=True,
     )
+    prediction.add_argument("--size", type=int, default=1536, help="image size")
     prediction.add_argument(
         "--gpu",
         type=str,
@@ -106,6 +108,7 @@ def main():
             logger.info(
                 f"Running prediction for images from {args.src_dir} to {args.dst_dir}"
             )
+            prediction.d121_predict(args.src_dir, args.dst_dir, args.size, args.gpu)
 
 
 if __name__ == "__main__":
