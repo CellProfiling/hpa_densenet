@@ -33,7 +33,7 @@ def _resize_images_help(param: tuple) -> None:
                 :, :, COLOR_INDEX.get(color)
             ]
         except Exception as e:
-            logger.error(f'Cannot read {fname} at all')
+            logger.error(f"Cannot read {fname} at all")
             logger.error(e)
             return
 
@@ -57,7 +57,7 @@ def resize_images(
           The resulting image is square, `size` x `size`.
           Defaults to 1536.
     num_workers: Number of parallel processes to use for resizing. Defaults to 10.
-    cont: Continue froma a previously aborted run. Should only be used when
+    cont: Continue from a a previously aborted run. Should only be used when
           `src_dir` has been unchanged between runs.
     """
     logger = logging.getLogger(name=constants.LOGGER_NAME)

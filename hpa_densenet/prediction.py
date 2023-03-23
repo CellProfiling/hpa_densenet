@@ -65,8 +65,11 @@ def _predict_items(
 
 
 def _store_outputs(probabilities, features, out_dir):
-    feature_target = os.path.join(out_dir, f"features_{time.time()}.npz")
+    curr_time = time.time()
+    feature_target = os.path.join(out_dir, f"features_{curr_time}.npz")
+    probabilities_target = os.path.join(out_dir, f"probabilities_{curr_time}.npz")
     np.savez_compressed(feature_target, feats=np.array(features))
+    np.savez_compressed(probabilities_target, probs=np.array(probabilities))
 
 
 def d121_predict(
@@ -78,32 +81,32 @@ def d121_predict(
     gpus: Optional[str] = None,
 ) -> None:
     """
-    Perform cell predictions using the winning Densenet121 model from the 
+    Perform cell predictions using the winning Densenet121 model from the
     HPA kaggle challenge.
 
     Arguments:
         src_dir: Path to a directory where resized images are located.
         out_dir: Path to a directory in which results are stored.
-        size: The size of the images in `src_dir`. Each image should be 
+        size: The size of the images in `src_dir`. Each image should be
               `size x size` large. Defaults to 1536.
         num_workers: The number of parallel workers for dataloading.
                      Defaults to 2.
         batch_size: The size of each batch for the dataloaders.
                     Defaults to 32.
         gpus: A string describing the gpus to be used for predictions.
-              Follows the same format as the environment variable 
-              CUDA_VISIBLE_DEVICES. If `gpus` is None, 
+              Follows the same format as the environment variable
+              CUDA_VISIBLE_DEVICES. If `gpus` is None,
               CUDA_VISIBLE_DEVICES will be used instead.
               The string can also be 'cpu', indicating that no gpu
-              should be used. 
+              should be used.
               Defaults to None.
     """
     logger = logging.getLogger(constants.LOGGER_NAME)
 
-    if gpus and gpus != 'cpu':
-        os.environ['CUDA_VISIBLE_DEVICES'] = gpus
+    if gpus and gpus != "cpu":
+        os.environ["CUDA_VISIBLE_DEVICES"] = gpus
     elif gpus is None:
-        gpus = os.environ['CUDA_VISIBLE_DEVICES']
+        gpus = os.environ["CUDA_VISIBLE_DEVICES"]
 
     logger.info(f"Using GPUS: {gpus}")
     logger.info("Loading model")
@@ -126,7 +129,7 @@ def d121_predict(
         image_size=size,
         crop_size=constants.CROP_SIZE,
         in_channels=constants.NUM_IN_CHANNELS,
-        suffix="png",
+        suffix="jpg",
     )
 
     dataloader = DataLoader(

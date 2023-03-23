@@ -108,7 +108,9 @@ def main():
             logger.info(
                 f"Running prediction for images from {args.src_dir} to {args.dst_dir}"
             )
-            prediction.d121_predict(args.src_dir, args.dst_dir, args.size, args.gpu)
+            prediction.d121_predict(
+                args.src_dir, args.dst_dir, args.size, gpus=args.gpu
+            )
 
 
 if __name__ == "__main__":
