@@ -30,10 +30,10 @@ python -m pip install -r requirements.txt
 === Data
 The model requires the input images to be stored in the following way:
 
-- All images should be in a single folder
-- All images should be separated into 4 based on their colors
-- The names of the images should fit the pattern `<X>_<Y>_<Z>_{red,blue,yellow,green}.<file_extension>`
-    - For example 44741_1177_B2_3_red.jpg or 2222_517_E3_1_yellow.png
+* All images should be in a single folder
+* All images should be separated into 4 based on their colors
+* The names of the images should fit the pattern `<X>_<Y>_<Z>_{red,blue,yellow,green}.<file_extension>`
+    ** For example 44741_1177_B2_3_red.jpg or 2222_517_E3_1_yellow.png
 
 == Commands
 All commands are run from the `main` module.
