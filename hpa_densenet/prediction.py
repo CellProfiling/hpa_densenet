@@ -1,7 +1,10 @@
+""" This module runs and stores the predictions from the HPA Densenet model.
+
+Author: Casper Winsnes
+"""
 import logging
 import os
 import time
-from datetime import datetime
 from typing import Optional
 
 import numpy as np

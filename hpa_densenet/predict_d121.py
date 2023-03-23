@@ -1,4 +1,8 @@
-"""A module designed to run the HPA Kaggle challenge winning model."""
+"""A module designed to run the HPA Kaggle challenge winning model.
+
+Original author: Shubin Dai
+Minor modifications: Casper Winsnes & Wei Ouyang
+"""
 import argparse
 import os
 import warnings
