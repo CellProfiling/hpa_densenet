@@ -48,19 +48,18 @@ performed is resizing of the images and the output format is hardcoded to `.jpg`
 
 The following arguments are allowed:
 ----
-options
-    -h, --help            show help message and exit
-    -s SRC_DIR, --src-dir SRC_DIR
-                            source directory, where images to process are located.
-    -d DST_DIR, --dst-dir DST_DIR
-                            destination directory, where processed images end up.
-    --size SIZE           image size
-                            The output size of the processed images. Default `1536`
-    -w NUM_WORKERS, --num-workers NUM_WORKERS
-                            The number of multiprocessing workers to perform the resizing
-                            Defaults to `10`.
-    --continue            Continue from a previously aborted run.
-                            This should only be done if the `SRC_DIR` is unchanged in between runs.
+-h, --help            show help message and exit
+-s SRC_DIR, --src-dir SRC_DIR
+                        source directory, where images to process are located.
+-d DST_DIR, --dst-dir DST_DIR
+                        destination directory, where processed images end up.
+--size SIZE           image size
+                        The output size of the processed images. Default `1536`
+-w NUM_WORKERS, --num-workers NUM_WORKERS
+                        The number of multiprocessing workers to perform the resizing
+                        Defaults to `10`.
+--continue            Continue from a previously aborted run.
+                        This should only be done if the `SRC_DIR` is unchanged in between runs.
 ----
 
 Note that `-s` and `-d` are required arguments!
@@ -76,18 +75,17 @@ At present time, the only format allowed for the input directory is `.jpg`.
 
 The following arguments are allowed:
 ----
-options:
-    -h, --help            show this help message and exit
-    -s SRC_DIR, --src-dir SRC_DIR
-                        src image directory (preprocessed)
-    -d DST_DIR, --dst-dir DST_DIR
-                        output directory
-    --size SIZE           image size
-                            Defaults to 1536.
-    --gpu GPU             Which gpus to use for prediction. 
-                            Any string valid for the environment variable `CUDA_VISIBLE_DEVICES`is valid for this. 
-                            If cpu calculations ONLY is desired, a value of 'cpu' is also allowed.
-                            Defaults to `CUDA_VISIBLE_DEVICES`
+-h, --help            show help message and exit
+-s SRC_DIR, --src-dir SRC_DIR
+                    src image directory (preprocessed)
+-d DST_DIR, --dst-dir DST_DIR
+                    output directory
+--size SIZE           image size
+                        Defaults to 1536.
+--gpu GPU             Which gpus to use for prediction. 
+                        Any string valid for the environment variable `CUDA_VISIBLE_DEVICES`is valid for this. 
+                        If cpu calculations ONLY is desired, a value of 'cpu' is also allowed.
+                        Defaults to `CUDA_VISIBLE_DEVICES`
 ----
 
 Note that `-s` and `-d` are required arguments!
