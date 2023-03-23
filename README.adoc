@@ -36,8 +36,9 @@ The model requires the input images to be stored in the following way:
     - For example 44741_1177_B2_3_red.jpg or 2222_517_E3_1_yellow.png
 
 == Commands
-All commands are run from the `main` module. To access the help section for any 
-specific command, run `python main <command> --help`.
+All commands are run from the `main` module.
+Specifically, the commands are run through the call `python main.py <command> <arguments>`
+To access the help section for any specific command, run `python main.py <command> --help`.
 
 The purpose and structure of each command is listed below:
 
