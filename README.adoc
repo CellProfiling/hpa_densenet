@@ -1,3 +1,112 @@
 = HPA Densenet
+:toc:
 
-This is a repository for running predictions using the winning densenet model from the https://www.kaggle.com/c/human-protein-atlas-image-classification/[HPA Kaggle Image Classification Challenge], as well as the relevant image preprocessing for the model to work ideally. The package also includes the possibility to perform dimensionality reduction using the https://umap-learn.readthedocs.io/en/latest/index.html[UMAP package].
+This is a repository for running predictions using the winning densenet model 
+from the 
+https://www.kaggle.com/c/human-protein-atlas-image-classification/[HPA Kaggle Image Classification Challenge], 
+as well as the relevant image preprocessing for the model to work ideally. 
+The package also includes the possibility to perform dimensionality reduction 
+using the https://umap-learn.readthedocs.io/en/latest/index.html[UMAP package].
+
+The package is centered around using separate commands for different parts of 
+the pipeline. Currently available commands are:
+
+- `preprocess` -- Preprocessing a set of images for future predictions.
+- `predict` -- Prediction using the HPA Densenet model.
+
+
+== Installation and Setup
+NOTE: It is recommended to run the module in a separate virtual environment 
+such as https://www.anaconda.com/[Anaconda] or 
+https://docs.python.org/3/library/venv.html[venvs] 
+to avoid any issues with package versions.
+
+Installing the required modules for this package can be done through `pip`.
+[,bash]
+----
+python -m pip install -r requirements.txt
+----
+
+=== Data
+The model requires the input images to be stored in the following way:
+
+- All images should be in a single folder
+- All images should be separated into 4 based on their colors
+- The names of the images should fit the pattern `<X>_<Y>_<Z>_{red,blue,yellow,green}.<file_extension>`
+    - For example 44741_1177_B2_3_red.jpg or 2222_517_E3_1_yellow.png
+
+== Commands
+All commands are run from the `main` module. To access the help section for any 
+specific command, run `python main <command> --help`.
+
+The purpose and structure of each command is listed below:
+
+=== preprocess
+The `preprocess` command performs preprocessing on images for them to be usable
+by the machine learning model. At present time, the only preprocessing that is 
+performed is resizing of the images and the output format is hardcoded to `.jpg`.
+
+The following arguments are allowed:
+----
+options
+    -h, --help            show help message and exit
+    -s SRC_DIR, --src-dir SRC_DIR
+                            source directory, where images to process are located.
+    -d DST_DIR, --dst-dir DST_DIR
+                            destination directory, where processed images end up.
+    --size SIZE           image size
+                            The output size of the processed images. Default `1536`
+    -w NUM_WORKERS, --num-workers NUM_WORKERS
+                            The number of multiprocessing workers to perform the resizing
+                            Defaults to `10`.
+    --continue            Continue from a previously aborted run.
+                            This should only be done if the `SRC_DIR` is unchanged in between runs.
+----
+
+Note that `-s` and `-d` are required arguments!
+
+=== predict
+The predict command runs the densenet model on the processed images. 
+The output from the model is split into two parts: probabilities and features. 
+The probabilities represent the model prediction probabilities while the features
+correspond to the latent space feature representation of the model.
+The two files are timestamped and stored in the output folder.
+
+At present time, the only format allowed for the input directory is `.jpg`.
+
+The following arguments are allowed:
+----
+options:
+    -h, --help            show this help message and exit
+    -s SRC_DIR, --src-dir SRC_DIR
+                        src image directory (preprocessed)
+    -d DST_DIR, --dst-dir DST_DIR
+                        output directory
+    --size SIZE           image size
+                            Defaults to 1536.
+    --gpu GPU             Which gpus to use for prediction. 
+                            Any string valid for the environment variable `CUDA_VISIBLE_DEVICES`is valid for this. 
+                            If cpu calculations ONLY is desired, a value of 'cpu' is also allowed.
+                            Defaults to `CUDA_VISIBLE_DEVICES`
+----
+
+Note that `-s` and `-d` are required arguments!
+
+== Example run
+Assuming you have a data folder containing images on the format described above,
+a prediction can easily be made using the following commands:
+
+[,bash]
+----
+$ python main.py preprocess -s data/images -d data/resized_images
+$ python main.py predict -s data/resized_images -d data/predictions
+----
+
+To access the predicted data, use https://numpy.org/[numpy] to load the stored arrays:
+[,python]
+----
+import numpy as np
+
+features = np.load('data/predictions/<FEATURE_FILE>')['feats']
+probabilities = np.load('data/predictions/<PROBABILITY_FILE>')['probs']
+----
