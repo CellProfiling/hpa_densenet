@@ -1,0 +1,3 @@
+= HPA Densenet
+
+This is a repository for running predictions using the winning densenet model from the https://www.kaggle.com/c/human-protein-atlas-image-classification/[HPA Kaggle Image Classification Challenge], as well as the relevant image preprocessing for the model to work ideally. The package also includes the possibility to perform dimensionality reduction using the https://umap-learn.readthedocs.io/en/latest/index.html[UMAP package].
