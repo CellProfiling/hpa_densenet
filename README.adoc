@@ -47,6 +47,7 @@ The `preprocess` command performs preprocessing on images for them to be usable
 by the machine learning model. At present time, the only preprocessing that is 
 performed is resizing of the images and the output format is hardcoded to `.jpg`.
 
+==== preprocess options
 The following arguments are allowed:
 ----
 -h, --help            show help message and exit
@@ -67,12 +68,21 @@ Note that `-s` and `-d` are required arguments!
 
 === predict
 The predict command runs the densenet model on the processed images. 
-The output from the model is split into two parts: probabilities and features. 
+The output from the model is split into three parts: probabilities, meta_information, 
+and features. 
 The probabilities represent the model prediction probabilities while the features
 correspond to the latent space feature representation of the model.
-The two files are timestamped and stored in the output folder.
+The meta information contains the names of each image that was predicted upon.
+The three files are timestamped and stored in the output folder.
+
+The output files are all compressed `numpy` storage files and can be loaded 
+using the `numpy.load` function. 
+Each file contains a python dict with the corresponding information. To see how to load
+the information, see the example presented in <<Example run>>.
 
 At present time, the only format allowed for the input directory is `.jpg`.
+
+==== predict options
 
 The following arguments are allowed:
 ----
@@ -108,4 +118,5 @@ import numpy as np
 
 features = np.load('data/predictions/<FEATURE_FILE>')['feats']
 probabilities = np.load('data/predictions/<PROBABILITY_FILE>')['probs']
+image_ids = np.load('data/predictions/<META_INFORMAITON_FILE>')['image_ids']
 ----
