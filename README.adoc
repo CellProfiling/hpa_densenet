@@ -168,7 +168,7 @@ import numpy as np
 
 features = np.load('data/predictions/<FEATURE_FILE>')['feats']
 probabilities = np.load('data/predictions/<PROBABILITY_FILE>')['probs']
-image_ids = np.load('data/predictions/<META_INFORMAITON_FILE>')['image_ids']
+image_ids = np.load('data/predictions/<META_INFORMATION_FILE>')['image_ids']
 
 # If you performed dimensionality reduction, you load it in a similar vein.
 reduced = np.load('data/umap/reduced.npz')['components']

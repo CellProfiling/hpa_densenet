@@ -6,11 +6,13 @@ Author: Casper Winsnes
 import datetime
 import logging
 import os
+import time
 from typing import Optional
 
 import numpy as np
 import umap
 from numpy.typing import NDArray
+
 from hpa_densenet import constants
 
 
