@@ -35,6 +35,19 @@ The model requires the input images to be stored in the following way:
 * The names of the images should fit the pattern `<FILENAME>_{red,blue,yellow,green}.<file_extension>`
     ** For example file1_red.jpg or 2222_517_E3_1_yellow.png
 
+----
+An example data folder could look like
+
+data/
+    images/
+        image1_red.jpg          image2_red.jpg
+        image1_blue.jpg         image2_blue.jpg
+        image1_yellow.jpg       image2_yellow.jpg
+        image1_green.jpg        image2_green.jpg
+
+et.c.
+----
+
 == Commands
 All commands are run from the `main` module.
 Specifically, the commands are run through the call `python main.py <command> <arguments>`
