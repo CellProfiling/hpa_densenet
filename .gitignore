@@ -185,3 +185,8 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vim
+# Local testing files
+testingenv/
+HPAv18RBGY_wodpl.csv
+HPAv18/
+download_images.py

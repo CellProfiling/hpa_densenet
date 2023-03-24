@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from hpa_densenet import constants, prediction, preprocess
+from hpa_densenet import constants, prediction, preprocess, dimred
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
@@ -70,6 +70,36 @@ def _build_prediction_subcommand(prediction: argparse.ArgumentParser) -> None:
     )
 
 
+def _build_dimred_subcommand(dimred: argparse.ArgumentParser) -> None:
+    dimred.set_defaults(command="dimred")
+    dimred.add_argument(
+        "-s",
+        "--src",
+        type=str,
+        default=None,
+        help="Source feature file to reduce.",
+        required=True,
+    )
+    dimred.add_argument(
+        "-d",
+        "--dst",
+        type=str,
+        default=None,
+        help=(
+            "File to store predictions in. "
+            "The prediction will be stored in the compressed numpy format '.npz'."
+        ),
+        required=True,
+    )
+    dimred.add_argument(
+        "-n",
+        "--num-dim",
+        type=int,
+        default=2,
+        help="Number of dimensions to reduce to. Defaults to 2.",
+    )
+
+
 def _build_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="PyTorch Protein Classification")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -83,6 +113,11 @@ def _build_argparser() -> argparse.ArgumentParser:
 
     prediction = subparsers.add_parser("predict", help="Run Densenet for prediction")
     _build_prediction_subcommand(prediction)
+
+    dimred = subparsers.add_parser(
+        "dimred", help="Perform dimensionality reduction on Densenet features"
+    )
+    _build_dimred_subcommand(dimred)
 
     return parser
 
@@ -111,6 +146,12 @@ def main():
             prediction.d121_predict(
                 args.src_dir, args.dst_dir, args.size, gpus=args.gpu
             )
+        case "dimred":
+            logger.info(
+                f"Running dimensionality reduction on {args.src} to be stored in {args.dst}"
+            )
+            reduced = dimred.dimred(args.src, args.num_dim)
+            dimred.store_dimred(reduced, filename=args.dst)
 
 
 if __name__ == "__main__":

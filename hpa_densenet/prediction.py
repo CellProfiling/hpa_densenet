@@ -1,7 +1,11 @@
+""" This module runs and stores the predictions from the HPA Densenet model.
+
+Author: Casper Winsnes
+"""
 import logging
 import os
 import time
-from datetime import datetime
+import datetime
 from typing import Optional
 
 import numpy as np
@@ -64,12 +68,14 @@ def _predict_items(
     return result_probabilities, result_features
 
 
-def _store_outputs(probabilities, features, out_dir):
-    curr_time = time.time()
+def _store_outputs(probabilities, features, image_ids, out_dir):
+    curr_time = datetime.date.today().strftime(f"%Y-%m-%d-{time.time()}")
     feature_target = os.path.join(out_dir, f"features_{curr_time}.npz")
     probabilities_target = os.path.join(out_dir, f"probabilities_{curr_time}.npz")
+    meta_information_target = os.path.join(out_dir, f"meta_information_{curr_time}.npz")
     np.savez_compressed(feature_target, feats=np.array(features))
     np.savez_compressed(probabilities_target, probs=np.array(probabilities))
+    np.savez_compressed(meta_information_target, image_ids=np.array(image_ids))
 
 
 def d121_predict(
@@ -148,4 +154,4 @@ def d121_predict(
     # TODO: return values instead of storing here.
     #       let the caller use the values as they want.
     logger.info(f"Storing output in {out_dir}.")
-    _store_outputs(probs, feats, out_dir)
+    _store_outputs(probs, feats, dataset.image_ids, out_dir)
