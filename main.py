@@ -85,7 +85,10 @@ def _build_dimred_subcommand(dimred: argparse.ArgumentParser) -> None:
         "--dst",
         type=str,
         default=None,
-        help="File to store predictions in.",
+        help=(
+            "File to store predictions in. "
+            "The prediction will be stored in the compressed numpy format '.npz'."
+        ),
         required=True,
     )
     dimred.add_argument(

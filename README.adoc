@@ -67,7 +67,7 @@ The following arguments are allowed:
 Note that `-s` and `-d` are required arguments!
 
 === predict
-The predict command runs the densenet model on the processed images. 
+The `predict` command runs the densenet model on the processed images. 
 The output from the model is split into three parts: probabilities, meta_information, 
 and features. 
 The probabilities represent the model prediction probabilities while the features
@@ -91,6 +91,8 @@ The following arguments are allowed:
                     src image directory (preprocessed)
 -d DST_DIR, --dst-dir DST_DIR
                     output directory
+                    The output files will be stored in the compressed numpy 
+                    format '.npz'.
 --size SIZE           image size
                         Defaults to 1536.
 --gpu GPU             Which gpus to use for prediction. 
@@ -101,15 +103,50 @@ The following arguments are allowed:
 
 Note that `-s` and `-d` are required arguments!
 
+=== dimred
+The `dimred` command runs UMAP dimensionality reduction on the features from the
+`predict` command.
+
+The output consists of an n-dimensional array stored in '.npz' format, where `n`
+corresponds to the number of dimensions asked for. To se how to easily load 
+the data, see the example in <<Example run>>.
+
+==== dimred options
+
+The following arguments are allowed:
+----
+-h, --help            show help message and exit
+-s SRC, --src SRC     Source feature file to reduce.
+-d DST, --dst DST     File to store predictions in. 
+                        The prediction will be stored in the compressed 
+                        numpy format '.npz'.
+-n NUM_DIM, --num-dim NUM_DIM
+                    Number of dimensions to reduce to. Defaults to 2.
+----
+
+Note that `-s` and `-d` are required arguments!
+
 == Example run
 Assuming you have a data folder containing images on the format described above,
 a prediction can easily be made using the following commands:
 
+=== Preprocess and predict
 [,bash]
 ----
 $ python main.py preprocess -s data/images -d data/resized_images
 $ python main.py predict -s data/resized_images -d data/predictions
 ----
+
+=== Dimensionality reduction
+If you want to perform dimensionality reduction using UMAP, you can run the 
+following commands:
+
+[,bash]
+----
+$ python main.py dimred -s data/predictions/<FEATURE_FILE> -d data/umap/reduced.npz
+----
+
+=== Loading the resulting data
 
 To access the predicted data, use https://numpy.org/[numpy] to load the stored arrays:
 [,python]
@@ -119,4 +156,7 @@ import numpy as np
 features = np.load('data/predictions/<FEATURE_FILE>')['feats']
 probabilities = np.load('data/predictions/<PROBABILITY_FILE>')['probs']
 image_ids = np.load('data/predictions/<META_INFORMAITON_FILE>')['image_ids']
+
+# If you performed dimensionality reduction, you load it in a similar vein.
+reduced = np.load('data/umap/reduced.npz')['components']
 ----

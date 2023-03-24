@@ -3,12 +3,14 @@ HPA Densenet model.
 
 Author: Casper Winsnes
 """
+import datetime
 import logging
+import os
+from typing import Optional
 
 import numpy as np
 import umap
 from numpy.typing import NDArray
-
 from hpa_densenet import constants
 
 
@@ -43,8 +45,24 @@ def _umap_dimred(
     return reducer.fit_transform(input_data)
 
 
-def store_dimred(reduced_data: NDArray, filename: str = None):
-    pass
+def store_dimred(reduced_data: NDArray, filename: Optional[str] = None):
+    """Store the reduced dimensions in a compressed numpy format.
+
+    Args:
+        reduced_data (NDArray): The data to store.
+
+        filename (Optional[str], optional): Filename to store data in. If None,
+        store the data in a timestamped file in the current folder.
+        Defaults to None.
+    """
+    if filename is None:
+        curr_time = datetime.date.today().strftime(f"%Y-%m-%d-{time.time()}")
+        filename = f"dimred_features-{curr_time}.npz"
+    else:
+        folder = os.path.dirname(filename)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
+    np.savez_compressed(filename, components=reduced_data)
 
 
 def dimred(input_data: str, dimensions: int = 2, method: str = "umap") -> NDArray:
