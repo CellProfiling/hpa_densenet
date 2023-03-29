@@ -1,4 +1,4 @@
-"""This module generates data related to plot 2d UMAP for
+"""This module generates data related to plot Nd UMAP for
 HPA Densenet model.
 
 Author: Frederic Ballllosera Navarro
@@ -9,7 +9,10 @@ import logging
 from hpa_densenet import constants
 
 
-def generateCSV(f_red: str, f_meta: str, dst: str):
+dimension_names = ["X", "Y", "Z", "T"]
+
+
+def generateCSV(f_red: str, n_dim: int, f_meta: str, dst: str):
     """Generates a CSV file containing image ids from the meta-information file and
     X, Y from the dimensionality reduction file
 
@@ -30,7 +33,11 @@ def generateCSV(f_red: str, f_meta: str, dst: str):
 
     df = pd.DataFrame()
     df = pd.concat([df, pd.DataFrame(image_ids)], axis=1)
-    df = pd.concat([df, pd.DataFrame(reduced)], axis=1)
-    df.columns = ['Id', 'X', 'Y']
+    final_dim = []
+    for i in range(n_dim):
+        df = pd.concat([df, pd.DataFrame(reduced[:, i])], axis=1)
+        final_dim.append(dimension_names[i] if i < len(dimension_names) else "n" + str(i))
+
+    df.columns = ['Id'] + final_dim
     df.to_csv(dst, index=False)
 

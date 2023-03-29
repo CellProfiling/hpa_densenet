@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from hpa_densenet import constants, prediction, preprocess, dimred, umap2d
+from hpa_densenet import constants, prediction, preprocess, dimred, umapNd
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
@@ -100,9 +100,9 @@ def _build_dimred_subcommand(dimred: argparse.ArgumentParser) -> None:
     )
 
 
-def _build_umap2d_subcommand(umap2d: argparse.ArgumentParser) -> None:
-    umap2d.set_defaults(command="umap2d")
-    umap2d.add_argument(
+def _build_umapNd_subcommand(umapNd: argparse.ArgumentParser) -> None:
+    umapNd.set_defaults(command="umapNd")
+    umapNd.add_argument(
         "-sred",
         "--sred",
         type=str,
@@ -110,7 +110,14 @@ def _build_umap2d_subcommand(umap2d: argparse.ArgumentParser) -> None:
         help="Source reduction file.",
         required=True,
     )
-    umap2d.add_argument(
+    umapNd.add_argument(
+        "-n",
+        "--num-dim",
+        type=int,
+        default=None,
+        help="Number of present reduced dimensions to add to the CSV.",
+    )
+    umapNd.add_argument(
         "-smeta",
         "--smeta",
         type=str,
@@ -118,7 +125,7 @@ def _build_umap2d_subcommand(umap2d: argparse.ArgumentParser) -> None:
         help="Source meta-information file.",
         required=True,
     )
-    umap2d.add_argument(
+    umapNd.add_argument(
         "-d",
         "--dst",
         type=str,
@@ -147,10 +154,10 @@ def _build_argparser() -> argparse.ArgumentParser:
     )
     _build_dimred_subcommand(dimred)
 
-    umap2d = subparsers.add_parser(
-        "umap2d", help="Genearates data to plot 2d UMAP"
+    umapNd = subparsers.add_parser(
+        "umapNd", help="Genearates data to plot Nd UMAP"
     )
-    _build_umap2d_subcommand(umap2d)
+    _build_umapNd_subcommand(umapNd)
 
     return parser
 
@@ -185,12 +192,12 @@ def main():
             )
             reduced = dimred.dimred(args.src, args.num_dim)
             dimred.store_dimred(reduced, filename=args.dst)
-        case "umap2d":
+        case "umapNd":
             logger.info(
-                f"Running 2d UMAP data generation on {args.sred}/{args.smeta} to be stored in {args.dst}"
+                f"Running {args.num_dim}d UMAP data generation on {args.sred}/{args.smeta} to be stored in {args.dst}"
             )
-            umap2d.generateCSV(
-                args.sred, args.smeta, args.dst
+            umapNd.generateCSV(
+                args.sred, args.num_dim, args.smeta, args.dst
             )
 
 

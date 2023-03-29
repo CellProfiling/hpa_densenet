@@ -14,7 +14,7 @@ the pipeline. Currently available commands are:
 - `preprocess` -- Preprocessing a set of images for future predictions.
 - `predict` -- Prediction using the HPA Densenet model.
 - `dimred` -- Perform dimensionality reduction on the output from the HPA Densenet model.
-- `umap2d` -- Generates a CSV file with the previous results as a data source to plot a 2d UMAP.
+- `umapNd` -- Generates a CSV file with the previous results as a data source to plot a Nd UMAP.
 
 
 == Installation and Setup
@@ -146,18 +146,19 @@ The following arguments are allowed:
 
 Note that `-s` and `-d` are required arguments!
 
-=== umap2d
-The `umap2d` command generates a simple CSV file from a previous dimensionality result file and meta-information result
+=== umapNd
+The `umapNd` command generates a simple CSV file from a previous dimensionality result file and meta-information result
 file.
 
-The output consists CSV file with the columns "Id", "X" and "Y". See the example in <<Example run>>.
+The output consists CSV file with the columns "Id", "X", "Y", [...]. See the example in <<Example run>>.
 
-==== umap2d options
+==== umapNd options
 
 The following arguments are allowed:
 ----
 -h, --help            show help message and exit
 -sred, --sred         Source reduction file.
+-n, --num-dim         Number of present reduced dimensions to add to the CSV
 -smeta, --smeta       Source meta-information file.
 -d, --dst             File to store the CSV values in.
 ----
@@ -184,13 +185,15 @@ following commands:
 $ python main.py dimred -s data/predictions/<FEATURE_FILE> -d data/umap/reduced.npz
 ----
 
-=== UMAP 2d CSV generation
-If you want to generate a CSV file containing the date to plot a 2d UMAP, you can run the
+=== UMAP Nd CSV generation
+If you want to generate a CSV file containing the date to plot a Nd UMAP, you can run the
 following commands:
 
 [,bash]
 ----
-$ python main.py umap2d -sred data/predictions/<FEATURE_FILE> -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap2d.csv
+$ python main.py umapNd -sred data/predictions/<FEATURE_FILE> --num-dim 2 -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap2d.csv
+OR
+$ python main.py umapNd -sred data/predictions/<FEATURE_FILE> --num-dim 3 -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap3d.csv
 ----
 
 === Loading the resulting data
