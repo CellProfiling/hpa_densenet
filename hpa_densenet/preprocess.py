@@ -1,3 +1,7 @@
+""" Module for preprocessing of images for the HPA Densenet model.
+
+Author: Casper Winsnes
+"""
 import logging
 import os
 
