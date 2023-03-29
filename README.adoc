@@ -14,12 +14,13 @@ the pipeline. Currently available commands are:
 - `preprocess` -- Preprocessing a set of images for future predictions.
 - `predict` -- Prediction using the HPA Densenet model.
 - `dimred` -- Perform dimensionality reduction on the output from the HPA Densenet model.
+- `umap2d` -- Generates a CSV file with the previous results as a data source to plot a 2d UMAP.
 
 
 == Installation and Setup
-NOTE: It is recommended to run the module in a separate virtual environment 
-such as https://www.anaconda.com/[Anaconda] or 
-https://docs.python.org/3/library/venv.html[venvs] 
+NOTE: It is recommended to run the module in a separate virtual environment
+such as https://www.anaconda.com/[Anaconda] or
+https://docs.python.org/3/library/venv.html[venvs]
 to avoid any issues with package versions.
 
 Installing the required modules for this package can be done through `pip`.
@@ -63,7 +64,7 @@ The purpose and structure of each command is listed below:
 
 === preprocess
 The `preprocess` command performs preprocessing on images for them to be usable
-by the machine learning model. At present time, the only preprocessing that is 
+by the machine learning model. At present time, the only preprocessing that is
 performed is resizing of the images and the output format is hardcoded to `.jpg`.
 
 ==== preprocess options
@@ -86,16 +87,16 @@ The following arguments are allowed:
 Note that `-s` and `-d` are required arguments!
 
 === predict
-The `predict` command runs the densenet model on the processed images. 
-The output from the model is split into three parts: probabilities, meta_information, 
-and features. 
+The `predict` command runs the densenet model on the processed images.
+The output from the model is split into three parts: probabilities, meta_information,
+and features.
 The probabilities represent the model prediction probabilities while the features
 correspond to the latent space feature representation of the model.
 The meta information contains the names of each image that was predicted upon.
 The three files are timestamped and stored in the output folder.
 
-The output files are all compressed `numpy` storage files and can be loaded 
-using the `numpy.load` function. 
+The output files are all compressed `numpy` storage files and can be loaded
+using the `numpy.load` function.
 Each file contains a python dict with the corresponding information. To see how to load
 the information, see the example presented in <<Example run>>.
 
@@ -110,12 +111,12 @@ The following arguments are allowed:
                     src image directory (preprocessed)
 -d DST_DIR, --dst-dir DST_DIR
                     output directory
-                    The output files will be stored in the compressed numpy 
+                    The output files will be stored in the compressed numpy
                     format '.npz'.
 --size SIZE           image size
                         Defaults to 1536.
---gpu GPU             Which gpus to use for prediction. 
-                        Any string valid for the environment variable `CUDA_VISIBLE_DEVICES`is valid for this. 
+--gpu GPU             Which gpus to use for prediction.
+                        Any string valid for the environment variable `CUDA_VISIBLE_DEVICES`is valid for this.
                         If cpu calculations ONLY is desired, a value of 'cpu' is also allowed.
                         Defaults to `CUDA_VISIBLE_DEVICES`
 ----
@@ -127,7 +128,7 @@ The `dimred` command runs UMAP dimensionality reduction on the features from the
 `predict` command.
 
 The output consists of an n-dimensional array stored in '.npz' format, where `n`
-corresponds to the number of dimensions asked for. To se how to easily load 
+corresponds to the number of dimensions asked for. To se how to easily load
 the data, see the example in <<Example run>>.
 
 ==== dimred options
@@ -136,14 +137,32 @@ The following arguments are allowed:
 ----
 -h, --help            show help message and exit
 -s SRC, --src SRC     Source feature file to reduce.
--d DST, --dst DST     File to store predictions in. 
-                        The prediction will be stored in the compressed 
+-d DST, --dst DST     File to store predictions in.
+                        The prediction will be stored in the compressed
                         numpy format '.npz'.
 -n NUM_DIM, --num-dim NUM_DIM
                     Number of dimensions to reduce to. Defaults to 2.
 ----
 
 Note that `-s` and `-d` are required arguments!
+
+=== umap2d
+The `umap2d` command generates a simple CSV file from a previous dimensionality result file and meta-information result
+file.
+
+The output consists CSV file with the columns "Id", "X" and "Y". See the example in <<Example run>>.
+
+==== umap2d options
+
+The following arguments are allowed:
+----
+-h, --help            show help message and exit
+-sred, --sred         Source reduction file.
+-smeta, --smeta       Source meta-information file.
+-d, --dst             File to store the CSV values in.
+----
+
+Note that all arguments are required!
 
 == Example run
 Assuming you have a data folder containing images on the format described above,
@@ -157,12 +176,21 @@ $ python main.py predict -s data/resized_images -d data/predictions
 ----
 
 === Dimensionality reduction
-If you want to perform dimensionality reduction using UMAP, you can run the 
+If you want to perform dimensionality reduction using UMAP, you can run the
 following commands:
 
 [,bash]
 ----
 $ python main.py dimred -s data/predictions/<FEATURE_FILE> -d data/umap/reduced.npz
+----
+
+=== UMAP 2d CSV generation
+If you want to generate a CSV file containing the date to plot a 2d UMAP, you can run the
+following commands:
+
+[,bash]
+----
+$ python main.py umap2d -sred data/predictions/<FEATURE_FILE> -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap2d.csv
 ----
 
 === Loading the resulting data

@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from hpa_densenet import constants, prediction, preprocess, dimred
+from hpa_densenet import constants, prediction, preprocess, dimred, umap2d
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
@@ -100,6 +100,34 @@ def _build_dimred_subcommand(dimred: argparse.ArgumentParser) -> None:
     )
 
 
+def _build_umap2d_subcommand(umap2d: argparse.ArgumentParser) -> None:
+    umap2d.set_defaults(command="umap2d")
+    umap2d.add_argument(
+        "-sred",
+        "--sred",
+        type=str,
+        default=None,
+        help="Source reduction file.",
+        required=True,
+    )
+    umap2d.add_argument(
+        "-smeta",
+        "--smeta",
+        type=str,
+        default=None,
+        help="Source meta-information file.",
+        required=True,
+    )
+    umap2d.add_argument(
+        "-d",
+        "--dst",
+        type=str,
+        default=None,
+        help="output directory",
+        required=True,
+    )
+
+
 def _build_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="PyTorch Protein Classification")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -118,6 +146,11 @@ def _build_argparser() -> argparse.ArgumentParser:
         "dimred", help="Perform dimensionality reduction on Densenet features"
     )
     _build_dimred_subcommand(dimred)
+
+    umap2d = subparsers.add_parser(
+        "umap2d", help="Genearates data to plot 2d UMAP"
+    )
+    _build_umap2d_subcommand(umap2d)
 
     return parser
 
@@ -152,6 +185,13 @@ def main():
             )
             reduced = dimred.dimred(args.src, args.num_dim)
             dimred.store_dimred(reduced, filename=args.dst)
+        case "umap2d":
+            logger.info(
+                f"Running 2d UMAP data generation on {args.sred}/{args.smeta} to be stored in {args.dst}"
+            )
+            umap2d.generateCSV(
+                args.sred, args.smeta, args.dst
+            )
 
 
 if __name__ == "__main__":
