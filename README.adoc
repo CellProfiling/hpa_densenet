@@ -13,6 +13,7 @@ the pipeline. Currently available commands are:
 
 - `preprocess` -- Preprocessing a set of images for future predictions.
 - `predict` -- Prediction using the HPA Densenet model.
+- `dimred` -- Perform dimensionality reduction on the output from the HPA Densenet model.
 
 
 == Installation and Setup
