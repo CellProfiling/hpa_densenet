@@ -26,8 +26,8 @@ def generateCSV(f_red: str, n_dim: int, f_meta: str, dst: str):
     logger = logging.getLogger(constants.LOGGER_NAME)
     logger.info("Loading data for dimensionality reduction and meta-information")
     try:
-        reduced = np.load(f_red)['components']
-        image_ids = np.load(f_meta)['image_ids']
+        reduced = np.load(f_red)["components"]
+        image_ids = np.load(f_meta)["image_ids"]
     except:
         logger.error("Error when loading input data")
 
@@ -36,8 +36,9 @@ def generateCSV(f_red: str, n_dim: int, f_meta: str, dst: str):
     final_dim = []
     for i in range(n_dim):
         df = pd.concat([df, pd.DataFrame(reduced[:, i])], axis=1)
-        final_dim.append(dimension_names[i] if i < len(dimension_names) else "n" + str(i))
+        final_dim.append(
+            dimension_names[i] if i < len(dimension_names) else "n" + str(i)
+        )
 
-    df.columns = ['Id'] + final_dim
+    df.columns = ["Id"] + final_dim
     df.to_csv(dst, index=False)
-

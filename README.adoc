@@ -16,6 +16,8 @@ the pipeline. Currently available commands are:
 - `dimred` -- Perform dimensionality reduction on the output from the HPA Densenet model.
 - `umapNd` -- Generates a CSV file with the previous results as a data source to plot a Nd UMAP.
 
+If there are any questions on how to use the code in this repo please ask them by opening
+up an issue here on Github or by contacting @cwinsnes.
 
 == Installation and Setup
 NOTE: It is recommended to run the module in a separate virtual environment
@@ -94,6 +96,9 @@ The probabilities represent the model prediction probabilities while the feature
 correspond to the latent space feature representation of the model.
 The meta information contains the names of each image that was predicted upon.
 The three files are timestamped and stored in the output folder.
+
+The probabilities consist of the logit output of the model with the same order as 
+ the original Kaggle challenge.
 
 The output files are all compressed `numpy` storage files and can be loaded
 using the `numpy.load` function.

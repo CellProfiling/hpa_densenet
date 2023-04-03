@@ -40,6 +40,8 @@ def _resize_images_help(param: tuple) -> None:
             logger.error(f"Cannot read {fname} at all")
             logger.error(e)
             return
+    basename = fname.rpartition(".")[0]
+    fname = ".".join([basename, "jpg"])
 
     h, w = image.shape[:2]
     if h != size or w != size:

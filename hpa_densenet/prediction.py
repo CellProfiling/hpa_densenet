@@ -2,14 +2,15 @@
 
 Author: Casper Winsnes
 """
+import datetime
 import logging
 import os
 import time
-import datetime
 from typing import Optional
 
 import numpy as np
 import torch
+from numpy.typing import ArrayLike
 from torch.nn import DataParallel
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SequentialSampler
@@ -68,7 +69,15 @@ def _predict_items(
     return result_probabilities, result_features
 
 
-def _store_outputs(probabilities, features, image_ids, out_dir):
+def _store_outputs(
+    probabilities: ArrayLike, features: ArrayLike, image_ids: ArrayLike, out_dir: str
+):
+    """Store the probabilities, features, and image_ids in 3 separate npz files.
+
+    Args:
+        probabilities (ArrayLike), features (ArrayLike), image_ids (ArrayLike): The data to store.
+        out_dir (str): Folder to store the data in.
+    """
     curr_time = datetime.date.today().strftime(f"%Y-%m-%d-{time.time()}")
     feature_target = os.path.join(out_dir, f"features_{curr_time}.npz")
     probabilities_target = os.path.join(out_dir, f"probabilities_{curr_time}.npz")
@@ -152,6 +161,6 @@ def d121_predict(
     probs, feats = _predict_items(dataloader, model, gpu)
 
     # TODO: return values instead of storing here.
-    #       let the caller use the values as they want.
+    #       to let the caller use the values as they want.
     logger.info(f"Storing output in {out_dir}.")
     _store_outputs(probs, feats, dataset.image_ids, out_dir)

@@ -57,6 +57,7 @@ def store_dimred(reduced_data: NDArray, filename: Optional[str] = None):
         store the data in a timestamped file in the current folder.
         Defaults to None.
     """
+    logger = logging.getLogger(constants.LOGGER_NAME)
     if filename is None:
         curr_time = datetime.date.today().strftime(f"%Y-%m-%d-{time.time()}")
         filename = f"dimred_features-{curr_time}.npz"
@@ -64,6 +65,7 @@ def store_dimred(reduced_data: NDArray, filename: Optional[str] = None):
         folder = os.path.dirname(filename)
         if folder:
             os.makedirs(folder, exist_ok=True)
+    logger.info(f"Storing dimred data in {filename}")
     np.savez_compressed(filename, components=reduced_data)
 
 
@@ -79,7 +81,7 @@ def dimred(input_data: str, dimensions: int = 2, method: str = "umap") -> NDArra
         Defaults to 2.
 
         method (str, optional): Which dimensionality reduction method to use.
-                                Valid options are: "umap".
+                                Valid options are currently only "umap".
                                 Defaults to "umap".
 
     Returns:
@@ -92,6 +94,7 @@ def dimred(input_data: str, dimensions: int = 2, method: str = "umap") -> NDArra
     except:
         logger.error("Error when loading input data")
         raise ValueError(f"Incorrect input data file ({input_data})")
+    # Set up this way to make it easy to add other dimred functions.
     match method:
         case "umap":
             logger.info("Running UMAP dimensionality reduction")
