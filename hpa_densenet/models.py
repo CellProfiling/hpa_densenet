@@ -1,4 +1,5 @@
 # Original author: Shubin Dai
+# Slight modifications to original code: Casper Winsnes
 import math
 
 import torch
