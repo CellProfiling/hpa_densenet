@@ -23,14 +23,13 @@ def generateCSV(f_red: str, f_meta: str, dst: str):
     logger = logging.getLogger(constants.LOGGER_NAME)
     logger.info("Loading data for dimensionality reduction and meta-information")
     try:
-        reduced = np.load(f_red)['components']
-        image_ids = np.load(f_meta)['image_ids']
+        reduced = np.load(f_red)["components"]
+        image_ids = np.load(f_meta)["image_ids"]
     except:
         logger.error("Error when loading input data")
 
     df = pd.DataFrame()
     df = pd.concat([df, pd.DataFrame(image_ids)], axis=1)
     df = pd.concat([df, pd.DataFrame(reduced)], axis=1)
-    df.columns = ['Id', 'X', 'Y']
+    df.columns = ["Id", "X", "Y"]
     df.to_csv(dst, index=False)
-
