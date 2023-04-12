@@ -17,7 +17,7 @@ from torch.utils.data.sampler import SequentialSampler
 from tqdm import tqdm
 
 import hpa_densenet.constants as constants
-from hpa_densenet.dataset import ProteinDataset
+from hpa_densenet.dataset import ProteinDataset, augment_default
 from hpa_densenet.models import class_densenet121_large_dropout
 
 MANUAL_SEED = 0
@@ -48,8 +48,10 @@ def _predict_items(
     iterator = dataloader
     if logger.isEnabledFor(logging.INFO):
         iterator = tqdm(iterator, total=len(dataloader))
+    else:
+        iterator = dataloader
 
-    for images, idx in iterator:
+    for (images, _indices) in iterator:
         try:
             with torch.no_grad():
                 if gpu:
@@ -61,8 +63,8 @@ def _predict_items(
                 probabilities = torch.sigmoid(logits)
                 probabilities = probabilities.cpu().data.numpy().tolist()
 
-                result_probabilities += probabilities
-                result_features += features.cpu().data.numpy().tolist()
+                result_probabilities.extend(probabilities)
+                result_features.extend(features.cpu().data.numpy().tolist())
         except:
             logger.error(f"Not all images in batch are the same size")
 
@@ -146,6 +148,8 @@ def d121_predict(
         in_channels=constants.NUM_IN_CHANNELS,
         suffix="jpg",
     )
+    dataset.set_transform(augment_default)
+    dataset.set_random_crop(False)
 
     dataloader = DataLoader(
         dataset,

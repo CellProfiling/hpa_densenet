@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from hpa_densenet import constants, prediction, preprocess, dimred, umapNd
+from hpa_densenet import constants, dimred, prediction, preprocess, umapNd
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
