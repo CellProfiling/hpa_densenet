@@ -19,7 +19,7 @@ from hpa_densenet import constants
 def _umap_dimred(
     input_data: NDArray,
     dimensions: int,
-    n_neighbors: int = 2,
+    n_neighbors: int = 15,
 ) -> NDArray:
     """Perform dimensionality reduction using Uniform Manifold Approximation
     and Projection (UMAP).
@@ -36,6 +36,8 @@ def _umap_dimred(
         NDArray: UMAP embedding of the input data as an NDArray of size
         [num_samples, num_dimensions].
     """
+    logger = logging.getLogger(constants.LOGGER_NAME)
+    logger.info(f'Performing UMAP with {dimensions} dimensions')
     reducer = umap.UMAP(
         n_neighbors=n_neighbors,
         min_dist=0.1,
@@ -44,7 +46,9 @@ def _umap_dimred(
         random_state=33,
     )
 
-    return reducer.fit_transform(input_data)
+    reduced = reducer.fit_transform(input_data)
+    logging.info('UMAP done')
+    return reduced
 
 
 def store_dimred(reduced_data: NDArray, filename: Optional[str] = None):
