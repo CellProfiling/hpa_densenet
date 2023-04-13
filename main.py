@@ -177,7 +177,7 @@ def main():
         case "preprocess":
             logger.info(f"Preprocessing images from {args.src_dir} to {args.dst_dir}")
             preprocess.resize_images(
-                args.src_dir, args.dst_dir, size=args.size, cont=args.cont
+                args.src_dir, args.dst_dir, size=args.size, cont=args.cont, num_workers=args.num_workers
             )
         case "predict":
             logger.info(
