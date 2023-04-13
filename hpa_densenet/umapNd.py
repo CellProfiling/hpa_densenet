@@ -9,7 +9,7 @@ import logging
 from hpa_densenet import constants
 
 
-dimension_names = ["X", "Y", "Z", "T"]
+dimension_names = ["x", "y", "z", "t"]
 
 
 def generateCSV(f_red: str, n_dim: int, f_meta: str, dst: str):
@@ -40,5 +40,5 @@ def generateCSV(f_red: str, n_dim: int, f_meta: str, dst: str):
             dimension_names[i] if i < len(dimension_names) else "n" + str(i)
         )
 
-    df.columns = ["Id"] + final_dim
+    df.columns = ["id"] + final_dim
     df.to_csv(dst, index=False)

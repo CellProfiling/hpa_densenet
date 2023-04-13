@@ -31,5 +31,5 @@ def generateCSV(f_red: str, f_meta: str, dst: str):
     df = pd.DataFrame()
     df = pd.concat([df, pd.DataFrame(image_ids)], axis=1)
     df = pd.concat([df, pd.DataFrame(reduced)], axis=1)
-    df.columns = ["Id", "X", "Y"]
+    df.columns = ["id", "x", "y"]
     df.to_csv(dst, index=False)
