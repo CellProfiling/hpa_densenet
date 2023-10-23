@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from hpa_densenet import constants, dimred, prediction, preprocess, umapNd
+from hpa_densenet import constants
 
 
 def _build_preprocessing_subcommand(preprocessing: argparse.ArgumentParser) -> None:
@@ -176,6 +176,7 @@ def main():
     match args.command:
         case "preprocess":
             logger.info(f"Preprocessing images from {args.src_dir} to {args.dst_dir}")
+            from hpa_densenet import preprocess
             preprocess.resize_images(
                 args.src_dir, args.dst_dir, size=args.size, cont=args.cont, num_workers=args.num_workers
             )
@@ -183,6 +184,7 @@ def main():
             logger.info(
                 f"Running prediction for images from {args.src_dir} to {args.dst_dir}"
             )
+            from hpa_densenet import prediction
             prediction.d121_predict(
                 args.src_dir, args.dst_dir, args.size, gpus=args.gpu
             )
@@ -190,12 +192,14 @@ def main():
             logger.info(
                 f"Running dimensionality reduction on {args.src} to be stored in {args.dst}"
             )
+            from hpa_densenet import dimred
             reduced = dimred.dimred(args.src, args.num_dim)
             dimred.store_dimred(reduced, filename=args.dst)
         case "umapNd":
             logger.info(
                 f"Running {args.num_dim}d UMAP data generation on {args.sred}/{args.smeta} to be stored in {args.dst}"
             )
+            from hpa_densenet import umapNd
             umapNd.generateCSV(
                 args.sred, args.num_dim, args.smeta, args.dst
             )
