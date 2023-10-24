@@ -63,17 +63,18 @@ def resize_images(
           The resulting image is square, `size` x `size`.
           Defaults to 1536.
     num_workers: Number of parallel processes to use for resizing. Defaults to 10.
-    cont: Continue from a a previously aborted run. Should only be used when
-          `src_dir` has been unchanged between runs.
+    cont: Continue from a previously aborted run. Should only be used when the images
+          in `src_dir` has been unchanged between runs.
     """
     logger = logging.getLogger(name=constants.LOGGER_NAME)
 
-    fnames = np.sort(os.listdir(src_dir))
+    fnames = os.listdir(src_dir)
     os.makedirs(dst_dir, exist_ok=True)
 
     if cont:
-        start_num = max(0, len(os.listdir(dst_dir)))
-        fnames = fnames[start_num:]
+        destfiles = os.listdir(dst_dir)
+        fnames = list(set(fnames) - set(destfiles))
+    fnames = np.sort(fnames)
     params = [(src_dir, fname, dst_dir, size) for fname in fnames]
 
     logger.info(f"Spawning {num_workers} to resize images")
