@@ -1,5 +1,6 @@
 mlcrate==0.1.0
 numpy==1.21.2
+numba==0.57.1
 scipy==1.10.1
 opencv-python==4.6.0.66
 pandas>=0.23.1
