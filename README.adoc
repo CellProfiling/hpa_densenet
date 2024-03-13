@@ -21,15 +21,28 @@ up an issue here on Github or by contacting @cwinsnes.
 
 == Installation and Setup
 NOTE: It is recommended to run the module in a separate virtual environment
-such as https://www.anaconda.com/[Anaconda] or
+such as https://conda.io/projects/conda/en/latest/user-guide/install/linux.html[miniconda] or
 https://docs.python.org/3/library/venv.html[venvs]
 to avoid any issues with package versions.
 
-Installing the required modules for this package can be done through `pip`.
+If using miniconda, the environment can be installed by running:
+[,bash]
+----
+python env create -f environment.yml
+----
+
+After your environment is created, activate it with:
+[,bash]
+----
+conda activate cm4ai-hpa
+----
+
+Or after creating a separate environment, the required modules can be installed with `pip`.
 [,bash]
 ----
 python -m pip install -r requirements.txt
 ----
+
 
 === Data
 The model requires the input images to be stored in the following way:
