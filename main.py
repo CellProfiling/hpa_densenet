@@ -107,22 +107,23 @@ def _build_umapNd_subcommand(umapNd: argparse.ArgumentParser) -> None:
         "--sred",
         type=str,
         default=None,
-        help="Source reduction file.",
+        help="Source of the reduction file.",
         required=True,
-    )
-    umapNd.add_argument(
-        "-n",
-        "--num-dim",
-        type=int,
-        default=None,
-        help="Number of present reduced dimensions to add to the CSV.",
     )
     umapNd.add_argument(
         "-smeta",
         "--smeta",
         type=str,
         default=None,
-        help="Source meta-information file.",
+        help="Source of the meta-information file.",
+        required=True,
+    )
+    umapNd.add_argument(
+        "-sprob",
+        "--sprob",
+        type=str,
+        default=None,
+        help="Source of the probabilities file.",
         required=True,
     )
     umapNd.add_argument(
@@ -132,6 +133,13 @@ def _build_umapNd_subcommand(umapNd: argparse.ArgumentParser) -> None:
         default=None,
         help="output directory",
         required=True,
+    )
+    umapNd.add_argument(
+        "-n",
+        "--num-dim",
+        type=int,
+        default=None,
+        help="Number of present reduced dimensions to add to the CSV.",
     )
 
 
@@ -194,11 +202,9 @@ def main():
             dimred.store_dimred(reduced, filename=args.dst)
         case "umapNd":
             logger.info(
-                f"Running {args.num_dim}d UMAP data generation on {args.sred}/{args.smeta} to be stored in {args.dst}"
+                f"Running {args.num_dim}d UMAP data generation on {args.sred}/{args.smeta}/{args.sprob} to be stored in {args.dst}"
             )
-            umapNd.generateCSV(
-                args.sred, args.num_dim, args.smeta, args.dst
-            )
+            umapNd.generateCSV(args.sred, args.smeta, args.sprob, args.dst, args.num_dim)
 
 
 if __name__ == "__main__":

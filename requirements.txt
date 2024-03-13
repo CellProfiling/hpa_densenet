@@ -1,12 +1,13 @@
 mlcrate==0.1.0
-numpy==1.21.2
+numpy~=1.24.4
 scipy==1.10.1
 opencv-python==4.6.0.66
 pandas>=0.23.1
-pillow==8.3.2
+pillow==10.2.0
+plotly~=5.16.0
 scikit-image==0.18.3
 scikit-learn==1.2.2
-torch==1.11.0
-torchvision==0.2.1
+torch==2.2.1
+torchvision==0.17.1
 tqdm==4.29.1
 umap-learn==0.5.3
