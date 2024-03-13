@@ -196,9 +196,9 @@ following commands:
 
 [,bash]
 ----
-$ python main.py umapNd -sred data/predictions/<FEATURE_FILE> --num-dim 2 -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap2d.csv
+$ python main.py umapNd -sred data/umap/<REDUCED_FILE> --num-dim 2 -smeta data/predictions/<METAINFORMATION_FILE> -sprob data/predictions/<PROBABILITIES_FILE> --dst data/umap2d.csv
 OR
-$ python main.py umapNd -sred data/predictions/<FEATURE_FILE> --num-dim 3 -smeta data/predictions/<METAINFORMATION_FILE> --dst data/umap3d.csv
+$ python main.py umapNd -sred data/umap/<REDUCED_FILE> --num-dim 3 -smeta data/predictions/<METAINFORMATION_FILE> -sprob data/predictions/<PROBABILITIES_FILE> --dst data/umap3d.csv
 ----
 
 === Loading the resulting data
